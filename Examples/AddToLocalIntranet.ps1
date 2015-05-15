@@ -1,4 +1,4 @@
-﻿configuration Sample_xZoneSite_AddToLocalIntranet
+configuration Sample_xZoneSite_AddToLocalIntranet
 {
     param
     (

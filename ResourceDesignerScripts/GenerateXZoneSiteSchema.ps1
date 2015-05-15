@@ -1,4 +1,4 @@
-﻿Param(
+Param(
     $Name = 'MSFT_xZoneSite',
     $FriendlyName = 'xZoneSite'
 )
