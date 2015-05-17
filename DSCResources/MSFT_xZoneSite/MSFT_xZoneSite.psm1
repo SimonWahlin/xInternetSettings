@@ -13,43 +13,6 @@ $PSDefaultParameterValues.Clear()
 $PSDefaultParameterValues['WriteVerbose:VerbLength'] = 8
 $PSDefaultParameterValues['WriteVerbose:NounLength'] = 0
 
-function ExtractArguments {
-    [CmdletBinding()]
-    param
-    (
-        [parameter(Mandatory = $true)]
-        $functionBoundParameters,
-        
-        [parameter(Mandatory = $true)]
-        [string[]]
-        $argumentNames,
-        
-        [string[]]
-        $newArgumentNames
-    )
-
-    $returnValue=@{}
-
-    for($i=0;$i -lt $argumentNames.Count;$i++)
-    {
-        if($newArgumentNames -and $newArgumentNames[$i] -ne $null)
-        {
-            $newArgumentName = $newArgumentNames[$i]
-        }
-        else
-        {
-            $newArgumentName = $argumentNames[$i]
-        }
-        
-        if($functionBoundParameters.ContainsKey($argumentNames[$i]))
-        {
-            [System.Void]$returnValue.Add($newArgumentName,$functionBoundParameters[$argumentNames[$i]])
-        }
-    }
-
-    return $returnValue
-}
-
 function WriteVerbose {
     [cmdletbinding()]
     param(
