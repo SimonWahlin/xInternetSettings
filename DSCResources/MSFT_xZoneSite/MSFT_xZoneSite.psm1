@@ -173,7 +173,9 @@ function Get-TargetResource
    
     return $returnValue
 
+
 }
+
 
 function Set-TargetResource
 {
@@ -236,7 +238,9 @@ function Set-TargetResource
             }
         }
     }
+
 }
+
 
 function Test-TargetResource
 {
@@ -290,6 +294,9 @@ function Test-TargetResource
         }
     }
     return (-not($bool))
+
 }
 
+
 Export-ModuleMember -Function *-TargetResource
+

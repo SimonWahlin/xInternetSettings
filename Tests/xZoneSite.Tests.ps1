@@ -1,4 +1,4 @@
-﻿$Module = "$PSScriptRoot\..\DSCResources\MSFT_xZoneSIte\MSFT_xZoneSite.psm1"
+$Module = "$PSScriptRoot\..\DSCResources\MSFT_xZoneSIte\MSFT_xZoneSite.psm1"
 Remove-Module -Name MSFT_xZoneSite -Force -ErrorAction SilentlyContinue
 Import-Module -Name $Module -Force -ErrorAction Stop
 

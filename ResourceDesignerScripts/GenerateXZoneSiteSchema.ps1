@@ -3,7 +3,8 @@ Param(
     $FriendlyName = 'xZoneSite'
 )
 Import-Module -Name xDSCResourceDesigner
-New-xDscResource -Name $Name -FriendlyName $FriendlyName -Path "$PSScriptRoot\..\.." -ModuleName xInternetSettings -Property $(
+
+Update-xDscResource -Path "$PSScriptRoot\..\DSCResources\$Name" -FriendlyName $FriendlyName -Property $(
     New-xDscResourceProperty -Name Uri -Type String -Attribute Key -Description "Address to configure, i.e. site.domain.com"
     New-xDscResourceProperty -Name Ensure -Type String -Attribute Write -ValidateSet 'Absent','Present' -Description "Sets Uri to be Present or Absent on machine"
     New-xDscResourceProperty -Name Type -Type String -Attribute Required -ValidateSet "*","file","ftp","http","https","knownfolder","ldap","news","nntp","oecmd","shell","snews" -Description "Sets protocol to be added, use * for any"
@@ -15,7 +16,7 @@ if(-Not(Test-xDscResource "$PSScriptRoot\..\DSCResources\$Name")) {Throw 'Test r
 if(-Not(Test-xDscSchema "$PSScriptRoot\..\DSCResources\$Name\$Name.schema.mof")) {Throw 'Test resource failed'}
 
 $error.Clear()
-Import-Module "$PSScriptRoot\.." –force
-If ($error.count –ne 0) {
-       Throw “Module was not imported correctly. Errors returned: $error”
+Import-Module "$PSScriptRoot\.." -Force
+If ($error.count -ne 0) {
+       Throw "Module was not imported correctly. Errors returned: $error"
 }
