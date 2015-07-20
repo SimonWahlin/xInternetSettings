@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/gxx9ctp1ay0l6cdj?svg=true)](https://ci.appveyor.com/project/SimonWahlin/xinternetsettings)
+
 # xInternetSettings
 
 The **xInternetSettings** module contains the **xZoneSite** resource, which adds or removes sites from zones for the current user in Internet Exporer Internet Settings.
