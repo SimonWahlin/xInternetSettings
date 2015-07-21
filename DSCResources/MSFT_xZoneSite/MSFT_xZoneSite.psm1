@@ -10,10 +10,10 @@ $RegistryRootPath = @{
     x64 = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains'
 }
 $PSDefaultParameterValues.Clear()
-$PSDefaultParameterValues['WriteVerbose:VerbLength'] = 8
-$PSDefaultParameterValues['WriteVerbose:NounLength'] = 0
+$PSDefaultParameterValues['Write-PRVerbose:VerbLength'] = 8
+$PSDefaultParameterValues['Write-PRVerbose:NounLength'] = 0
 
-function WriteVerbose {
+function Write-PRVerbose {
     [cmdletbinding()]
     param(
         [Parameter(Mandatory)]
@@ -41,7 +41,7 @@ function WriteVerbose {
 
 }
 
-function GetZoneSiteName {
+function Get-ZoneSiteName {
     [cmdletbinding()]
     param([String]$Uri)
     if($Uri -match '(?<=^\\\\|^\w{3,5}://)[^\\/]+(?=\\.*$|/.*$|$)')
@@ -56,11 +56,11 @@ function GetZoneSiteName {
     {
         throw 'Failed to parse Uri'
     }
-    WriteVerbose -Verb Get -Noun 'ZoneSite: Name' -Message $UriToTrust
+    Write-PRVerbose -Verb Get -Noun 'ZoneSite: Name' -Message $UriToTrust
     return $UriToTrust
 }
 
-function GetPartialRegPath {
+function Get-PartialRegPath {
     [cmdletbinding()]
     param([String]$Uri)
     $UriArray = $Uri -split '\.'
@@ -76,11 +76,11 @@ function GetPartialRegPath {
         $UriToTrust = $UriArray -join '.'
     }
     $UriToTrust = $UriToTrust -join '\'
-    WriteVerbose -Verb Get -Noun 'ZoneSite: PartialRegPath' -Message $UriToTrust
+    Write-PRVerbose -Verb Get -Noun 'ZoneSite: PartialRegPath' -Message $UriToTrust
     return $UriToTrust
 }
 
-function GetItemPropertyPath {
+function Get-ItemPropertyPath {
     [cmdletbinding()]
     param(
         [Parameter(Mandatory)]
@@ -91,10 +91,10 @@ function GetItemPropertyPath {
     )
     process
     {
-        $Uri = GetZoneSiteName -Uri $Uri
-        $ChildRegPath = GetPartialRegPath -Uri $Uri
+        $Uri = Get-ZoneSiteName -Uri $Uri
+        $ChildRegPath = Get-PartialRegPath -Uri $Uri
         $returnString = (Join-Path -Path $RegistryRootPath[$Platform] -ChildPath $ChildRegPath)
-        WriteVerbose -Verb Get -Noun 'ZoneSite: ItemPropertyPath' -Message $returnString
+        Write-PRVerbose -Verb Get -Noun 'ZoneSite: ItemPropertyPath' -Message $returnString
         return $returnString
     }
 }
@@ -120,12 +120,12 @@ function Get-TargetResource
         $Zone
     )
     $returnValue = @{
-        Uri  = GetZoneSiteName -Uri $Uri
+        Uri  = Get-ZoneSiteName -Uri $Uri
         Type = $Type
         Zone = $Zone
     }
-    $x86Path = GetItemPropertyPath -Uri $Uri -Platform x86
-    $x64Path = GetItemPropertyPath -Uri $Uri -Platform x64
+    $x86Path = Get-ItemPropertyPath -Uri $Uri -Platform x86
+    $x64Path = Get-ItemPropertyPath -Uri $Uri -Platform x64
     if($RegValue = Get-ItemProperty -Path $x86Path -Name $Type -ErrorAction SilentlyContinue)
     {
         if($RegValue.$Type -eq $ZoneList[$Zone])
@@ -209,11 +209,11 @@ function Set-TargetResource
     {
         'x86|All'
         {
-            GetItemPropertyPath -Uri $Uri -Platform x86
+            Get-ItemPropertyPath -Uri $Uri -Platform x86
         }
         'x64|All'
         {
-            GetItemPropertyPath -Uri $Uri -Platform x64
+            Get-ItemPropertyPath -Uri $Uri -Platform x64
         }
     }
     Foreach($Path in $PathList)
@@ -276,8 +276,8 @@ function Test-TargetResource
         'Present'{$bool = $true}
         'Absent'{$bool = $false}
     }
-    WriteVerbose -Verb Get -Noun Result:Ensure -Message $Get['Ensure']
-    WriteVerbose -Verb Get -Noun Result:Platform -Message $Get['Platform']
+    Write-PRVerbose -Verb Get -Noun Result:Ensure -Message $Get['Ensure']
+    Write-PRVerbose -Verb Get -Noun Result:Platform -Message $Get['Platform']
 
     if($Get['Ensure'] -eq 'Present')
     {
